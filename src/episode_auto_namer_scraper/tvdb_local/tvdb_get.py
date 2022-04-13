@@ -8,7 +8,7 @@ from episode_auto_namer_scraper.common.database import create_connection
 from episode_auto_namer_scraper.common.schema import Title, Episode
 
 
-def retrieveToDb(series, table, language, session):
+def retrieveToDb(series, language, session):
     db = api.TVDB("B43FF87DE395DF56")
     result = db.search(f"{series}", language)
     show = result[0]
@@ -60,10 +60,9 @@ def main():
     parser = argparse.ArgumentParser(
         description="Usage: get.py \"name of series\"")
     parser.add_argument("series", help="name of the series")
-    parser.add_argument("table", help="name of table in database for the series")
     parser.add_argument("language")
     args = parser.parse_args()
-    retrieveToDb(args.series, args.table, args.language, session)
+    retrieveToDb(args.series, args.language, session)
 
 
 if __name__ == '__main__':

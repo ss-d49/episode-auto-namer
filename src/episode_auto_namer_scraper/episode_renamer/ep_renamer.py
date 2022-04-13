@@ -22,8 +22,8 @@ def containsTitle(title, filename):
 		return False
 
 
-def rename_episode(file, table, series, session):
-	eps = session.query(Title).filter(Title.title.ilike(f"%{table}%")).first().episodes
+def rename_episode(file, series, session):
+	eps = session.query(Title).filter(Title.title.ilike(f"%{series}%")).first().episodes
 
 	for e in eps:
 		if e.seasonNumber != None:
@@ -31,7 +31,6 @@ def rename_episode(file, table, series, session):
 				newname = f"{series} - S{e.seasonNumber:02}E{e.episodeNumber:02} - {e.episodeTitle.replace('?','').replace('/','-').replace(':',' -')}{file.suffix}"
 				print(newname)
 				file.rename(newname)
-			break
 
 
 def main():
@@ -39,11 +38,10 @@ def main():
 
 	parser = argparse.ArgumentParser("Usage: epNamer.py ")
 	parser.add_argument("series", help="name of the series")
-	parser.add_argument("table", help="name of table in database for the series")
 	args = parser.parse_args()
 
 	for file in Path('.').glob('*.*'):
-		rename_episode(file, args.table, args.series, session)
+		rename_episode(file, args.series, session)
 
 if __name__ == '__main__':
     main()
