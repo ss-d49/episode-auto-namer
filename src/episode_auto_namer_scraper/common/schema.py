@@ -1,23 +1,21 @@
-from sqlalchemy import Column, Date, ForeignKey, Integer, Text
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Date, ForeignKey, Integer, Text, String
 from sqlalchemy.orm import relationship
+from episode_auto_namer_scraper.common.Database import Base
 
-base = declarative_base()
-
-class Title(base):
+class Title(Base):
     """Title Table Definition"""
     __tablename__ = 'title'
     titleId = Column(Integer, primary_key=True, nullable=False)
     titleIMDBId = Column(Integer)
-    title = Column(Text, unique=True, nullable=False)
-    originalTitle = Column(Text, unique=True)
+    title = Column(String(64), unique=True, nullable=False)
+    originalTitle = Column(String(64), unique=True)
     episodes = relationship("Episode")
     titleSynopsis = Column(Text)
     titleOriginalSynopsis = Column(Text)
     network = Column(Text)
 
 
-class Episode(base):
+class Episode(Base):
     """Episode Table Definition"""
     __tablename__ = 'episode'
     titleId = Column(Integer, ForeignKey('title.titleId'), nullable=False)
@@ -26,7 +24,7 @@ class Episode(base):
     seasonNumber = Column(Integer)
     episodeNumber = Column(Integer)
     episodeTitle = Column(Text, nullable=False)
-    episodeOriginalTitle = Column(Text, unique=True)
+    episodeOriginalTitle = Column(String(64), unique=True)
     episodeSynopsis = Column(Text)
     episodeOriginalSynopsis = Column(Text)
     episodeAired = Column(Date)
